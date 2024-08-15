@@ -8,31 +8,28 @@
 
 //   return (
 //       <ConnectButton/>
-      
-    
 
 //   )
 // };
 
 // export default Home;
 
-
 // import EventList from '@/components/EventList'
 // import Hero from '@/components/Hero'
-import { getEvents } from '../../services/blockchain'
-import { EventStruct } from '../../utils/type.dt'
-import { NextPage } from 'next'
-import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { getEvents } from "../../services/blockchain";
+import { EventStruct } from "../../utils/type.dt";
+import { NextPage } from "next";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
 const Page: NextPage<{ eventsData: EventStruct[] }> = ({ eventsData }) => {
-  const [end, setEnd] = useState<number>(6)
-  const [count] = useState<number>(6)
-  const [collection, setCollection] = useState<EventStruct[]>([])
+  const [end, setEnd] = useState<number>(6);
+  const [count] = useState<number>(6);
+  const [collection, setCollection] = useState<EventStruct[]>([]);
 
   useEffect(() => {
-    setCollection(eventsData.slice(0, end))
-  }, [eventsData, end])
+    setCollection(eventsData.slice(0, end));
+  }, [eventsData, end]);
 
   return (
     <div>
@@ -41,8 +38,8 @@ const Page: NextPage<{ eventsData: EventStruct[] }> = ({ eventsData }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Hero />
-      <EventList events={collection} />
+      {/* <Hero /> */}
+      {/* <EventList events={collection} /> */}
 
       <div className="mt-10 h-20 "></div>
 
@@ -53,20 +50,20 @@ const Page: NextPage<{ eventsData: EventStruct[] }> = ({ eventsData }) => {
         text-white duration-300 transition-all"
             onClick={() => setEnd(end + count)}
           >
-            {' '}
+            {" "}
             Load More
           </button>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
 
 export const getServerSideProps = async () => {
-  const eventsData: EventStruct[] = await getEvents()
+  const eventsData: EventStruct[] = await getEvents();
   return {
     props: { eventsData: JSON.parse(JSON.stringify(eventsData)) },
-  }
-}
+  };
+};
