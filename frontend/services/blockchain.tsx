@@ -1,39 +1,44 @@
-import viem, { createPublicClient } from 'viem';
-import address from '../contracts/contractAddress.json';
-import {abi} from '../contracts/Dfistival.json';
-import { EventParams, EventStruct, TicketStruct } from '../utils/type.dt';
-import { globalActions } from '../store/globalSlices';
-import { store } from '../store';
-import { parseEther, formatEther, getContract } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { Hex, createWalletClient, http, publicActions , createTestClient, walletActions} from "viem";;
-import { sepolia } from 'viem/chains';
-import { getWalletClient } from '@wagmi/core';
-import { config } from './config';
-import dotenv from 'dotenv';
+import viem, { createPublicClient } from "viem";
+import address from "../contracts/contractAddress.json";
+import { abi } from "../contracts/Dfistival.json";
+import { EventParams, EventStruct, TicketStruct } from "../utils/type.dt";
+import { globalActions } from "../store/globalSlices";
+import { store } from "../store";
+import { parseEther, formatEther, getContract } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import {
+  Hex,
+  createWalletClient,
+  http,
+  publicActions,
+  createTestClient,
+  walletActions,
+} from "viem";
+import { sepolia } from "viem/chains";
+import { getWalletClient } from "@wagmi/core";
+import { config } from "./config";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const toWei = (num: number) => parseEther(num.toString())
+const toWei = (num: number) => parseEther(num.toString());
 // const fromWei = (num: number) => formatEther(num)
 
 const privateKey = process.env.PRIVATE_KEY as `0x${string}`;
 const account = privateKeyToAccount(privateKey);
 
 async () => {
-    const client = createPublicClient({
-        chain: sepolia,
-        transport: http(process.env.API_URL)
-    });
+  const client = createPublicClient({
+    chain: sepolia,
+    transport: http(process.env.API_URL),
+  });
 
+  const balance = await client.getBalance({
+    address: account.address,
+  });
 
-    const balance = await client.getBalance({
-        address: account.address,
-    });
-
-    console.log(balance);
-}
-
+  console.log(balance);
+};
 
 // let ethereum: any
 // let tx: any
@@ -52,7 +57,7 @@ async () => {
 //         address : account.address,
 //         abi: abi,
 //         client: walletClient
-       
+
 //       })
 
 //     return contract
