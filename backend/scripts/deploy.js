@@ -9,7 +9,7 @@ async function deployContract() {
     contract = await ethers.deployContract('Dfistival', [servicePct])
     await contract.waitForDeployment()
 
-    console.log('Dfistival deployed successfully.')
+    console.log('Dfistival Contract deployed successfully.')
     return contract
   } catch (error) {
     console.error('Error deploying contracts:', error)
@@ -47,7 +47,7 @@ async function main() {
     contract = await deployContract()
     await saveContractAddress(contract)
 
-    console.log('Dfistival deployment completed successfully.')
+    console.log('Dfistival Contract deployment completed successfully.')
   } catch (error) {
     console.error('Unhandled error:', error)
   }
