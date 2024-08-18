@@ -1,6 +1,6 @@
 import viem, { createPublicClient } from "viem";
 import address from "../contracts/contractAddress.json";
-import { abi } from "../contracts/Dfistival.json";
+import { abi, bytecode } from "../contracts/Dfistival.json";
 import { EventParams, EventStruct, TicketStruct } from "../utils/type.dt";
 import { globalActions } from "../store/globalSlices";
 import { store } from "../store";
@@ -18,7 +18,6 @@ import { sepolia } from "viem/chains";
 import { getWalletClient } from "@wagmi/core";
 import { config } from "./config";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const toWei = (num: number) => parseEther(num.toString());
@@ -27,18 +26,37 @@ const toWei = (num: number) => parseEther(num.toString());
 const privateKey = process.env.PRIVATE_KEY as `0x${string}`;
 const account = privateKeyToAccount(privateKey);
 
-async () => {
-  const client = createPublicClient({
+(async () => {
+  const client = createWalletClient({
+    account,
     chain: sepolia,
     transport: http(process.env.API_URL),
+  }).extend(publicActions);
+
+  const hash = await client.deployContract({
+    abi,
+    bytecode: `0x${bytecode}`,
+    // args: [127n]    -- constructor arg
   });
 
-  const balance = await client.getBalance({
-    address: account.address,
-  });
-
-  console.log(balance);
-};
+  const createEvent = async (event: EventParams): Promise<void> => {
+    await client.writeContract({
+      address: `0x${address}`,
+      abi: abi,
+      functionName: "createEvent",
+      account,
+      args: [
+        event.title,
+        event.description,
+        event.imageUrl,
+        event.capacity,
+        toWei(Number(event.ticketCost)),
+        event.startsAt,
+        event.endsAt,
+      ],
+    });
+  };
+})();
 
 // let ethereum: any
 // let tx: any
