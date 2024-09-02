@@ -36,7 +36,7 @@ const account = privateKeyToAccount(privateKey);
   const hash = await client.deployContract({
     abi,
     bytecode: `0x${bytecode}`,
-    // args: [127n]    -- constructor arg
+    // args: [127n]   
   });
 
   const createEvent = async (event: EventParams): Promise<void> => {
